@@ -85,7 +85,7 @@ var loadTracksFromResponse = function(data) {
 
 	    	_tr.addClass('player_row');
 	    	_tr.data('track-id', track.id);
-	    	if (! (title.includes(searchVal) || uploader.includes(searchVal) || searchVal = '')) {
+	    	if (! (title.includes(searchVal) || uploader.includes(searchVal) || searchVal == '')) {
 				row.hide();
 			}
 
