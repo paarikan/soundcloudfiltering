@@ -86,7 +86,7 @@ var loadTracksFromResponse = function(data) {
 	    	_tr.addClass('player_row');
 	    	_tr.data('track-id', track.id);
 	    	if (! (track.title.includes(searchVal) || track.user.username.includes(searchVal) || searchVal == '')) {
-				row.hide();
+				_tr.hide();
 			}
 
 	    	track_table.append(_tr);
