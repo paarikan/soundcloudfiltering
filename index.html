@@ -29,7 +29,7 @@ table {
 
 <div id="header">
 	<iframe id="soundcloudEmbed" width="100%" height="150" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/214126050&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe>
-	<input id="search" />
+	<input id="search" placeholder="SEARCH" />
 </div>
 
 <table id="trackTable" style="margin-top:200px">
@@ -41,13 +41,14 @@ table {
 // initialize client with app credentials
 SC.initialize({
   client_id: '0033e9691d6c0f98a358769d1ab58269',
-  redirect_uri: 'http://127.0.0.1:8000/soundcloudlikes/callback.html'
+  redirect_uri: 'http://ec2-52-2-245-71.compute-1.amazonaws.com/soundcloudlikes/callback.html'
 });
 
 var track_table = $('#trackTable');
 var soundcloud_player = SC.Widget('soundcloudEmbed');
 var track_ids = {};
 var current_row;
+var searchVal = '';
 
 var loadTracks = function(href) {
 	if (href) {
@@ -84,6 +85,10 @@ var loadTracksFromResponse = function(data) {
 
 	    	_tr.addClass('player_row');
 	    	_tr.data('track-id', track.id);
+	    	if (! (title.includes(searchVal) || uploader.includes(searchVal) || searchVal = '')) {
+				row.hide();
+			}
+
 	    	track_table.append(_tr);
 	    	track_ids[track.id] = true;
     	}
@@ -122,7 +127,7 @@ soundcloud_player.bind(SC.Widget.Events.FINISH, function() {
 });
 
 $('#search').on('keyup', function() {
-	var searchVal = normalizeText($(this).val());
+	searchVal = normalizeText($(this).val());
 	var rows = $('tr');
 	if (searchVal.length < 1) {
 		rows.show();
@@ -142,7 +147,7 @@ $('#search').on('keyup', function() {
 
 // initiate auth popup
 SC.connect(function() {
-  SC.get('/me/favorites', { limit: 100, linked_partitioning: 1 }, function(data) {
+  SC.get('/me/favorites', { limit: 200, linked_partitioning: 1 }, function(data) {
     loadTracksFromResponse(data);
   });
 });
